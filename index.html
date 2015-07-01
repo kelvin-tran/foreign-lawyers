@@ -125,7 +125,7 @@
 					.attr("height", height + margin.top + margin.bottom)
 				.append("g")
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-			d3.csv("foreign-lawyers/lawyer-wages.csv", type, function(error, data) {
+			d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/lawyer-wages.csv", type, function(error, data) {
 					if (error) throw error;
 					x.domain(data.map(function(d) { return d.salary; }));
 					y.domain([0, d3.max(data, function(d) { return d.count; })]);
@@ -184,7 +184,7 @@
 			    .attr("height", aus_height + aus_margin.top + aus_margin.bottom)
 			  .append("g")
 			    .attr("transform", "translate(" + aus_margin.left + "," + aus_margin.top + ")");
-			d3.csv("foreign-lawyers/aus-wages.csv", type, function(error, data) {
+			d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/aus-wages.csv", type, function(error, data) {
 			  if (error) throw error;
 			  aus_x.domain(data.map(function(d) { return d.salary; }));
 			  aus_y.domain([0, d3.max(data, function(d) { return d.count; })]);
@@ -244,7 +244,7 @@
 				.attr("width", chloro_w)
 				.attr("height", chloro_h);
 			//Load in agriculture data
-			d3.csv("foreign-lawyers/aus-states.csv", function(data) {
+			d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/aus-states.csv", function(data) {
 				//Set input domain for color scale
 				chloro_color.domain([
 					d3.min(data, function(d) { return d.value; }), 
@@ -299,7 +299,7 @@
 		var tx_xAxis = d3.svg.axis()
 				.scale(tx_x)
 				.orient("bottom");
-		d3.csv("foreign-lawyers/TX.csv", type, function(error, data) {
+		d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/TX.csv", type, function(error, data) {
 			var tx_height = tx_barHeight * data.length + tx_margin.bottom;
 			var tx_chart = d3.select("#texas-chart").append("svg")
 					.attr("class", "chart")
@@ -345,7 +345,7 @@
 		var wa_xAxis = d3.svg.axis()
 				.scale(wa_x)
 				.orient("bottom");
-		d3.csv("foreign-lawyers/WA.csv", type, function(error, data) {
+		d3.csv("fhttps://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/WA.csv", type, function(error, data) {
 			var wa_height = wa_barHeight * data.length + wa_margin.bottom;
 			var wa_chart = d3.select("#wash-chart").append("svg")
 					.attr("class", "chart")
