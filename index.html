@@ -128,14 +128,9 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 			var margin = {top: 20, right: 10, bottom: 80, left: 30},
 					width = 620 - margin.left - margin.right,
 					height = 350 - margin.top - margin.bottom;
-			var x = d3.scale.ordinal()
-					.rangeRoundBands([0, width]);
+
 			var y = d3.scale.linear()
 					.range([height, 0]);
-			var xAxis = d3.svg.axis()
-					.scale(x)
-					.tickValues(x.domain().filter(function(d, i) { return !(i % 2); }))
-					.orient("bottom");
 			var yAxis = d3.svg.axis()
 					.scale(y)
 					.orient("left");
@@ -146,7 +141,13 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 			d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/lawyer-wages.csv", type, function(error, data) {
 					if (error) throw error;
-					x.domain(data.map(function(d) { return d.salary; }));
+					var x = d3.scale.ordinal()
+							.domain(data.map(function(d) { return d.salary; }))
+							.rangeRoundBands([0, width], .2);
+					var xAxis = d3.svg.axis()
+							.scale(x)
+							.tickValues(x.domain().filter(function(d, i) { return !(i % 2); }))
+							.orient("bottom");
 					y.domain([0, d3.max(data, function(d) { return d.count; })]);
 					svg.append("g")
 							.attr("class", "x axis")
