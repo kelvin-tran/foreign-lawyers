@@ -463,8 +463,8 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 				hex_height = 333;
 		
 		var hex_color = d3.scale.linear()
-				.domain([18200, 1000000])
-				.range(["#f7fbff","#deebf7","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#08519c","#08306b"]);
+				.domain([18200, 400000])
+				.range(['rgb(247,252,240)','rgb(224,243,219)','rgb(204,235,197)','rgb(168,221,181)','rgb(123,204,196)','rgb(78,179,211)','rgb(43,140,190)','rgb(8,104,172)','rgb(8,64,129)']);
 		
 		var hexbin = d3.hexbin()
 				.size([hex_width, hex_height])
