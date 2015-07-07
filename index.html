@@ -19,42 +19,56 @@
       ga('create', 'UA-64459548-1', 'auto');
       ga('send', 'pageview');
     </script>
-	  <style>
-	  .bar {
-	    fill: steelblue;
-	  }
-	  .bar:hover {
-	    fill: brown;
-	  }
-	  .axis {
-	    font: 9px sans-serif;
-	  }
+		<style>
+		path {
+		  fill: none;
+		  stroke-linejoin: round;
+		}
+		
+		.land {
+		  fill: #ddd;
+		}
+		
+		.states,
+		.hexagons path {
+		  stroke: #fff;
+		}
+		
+		.bar {
+			fill: steelblue;
+		}
+		.bar:hover {
+			fill: brown;
+		}
+		.axis {
+			font: 9px sans-serif;
+		}
 	  .axis path,
 	  .axis line {
-	    fill: none;
-	    stroke: #000;
-	    shape-rendering: crispEdges;
-	  }
-	  .x.axis path {
-	    display: none;
-	  }
-	.chart rect {
-	  fill: steelblue;
-	}
+			fill: none;
+			stroke: #000;
+			shape-rendering: crispEdges;
+		}
+		.x.axis path {
+			display: none;
+		}
+		.chart rect {
+			fill: steelblue;
+		}
 	
-	.chart rect:hover {
-		fill: brown;
-	}
+		.chart rect:hover {
+			fill: brown;
+		}
 	
-	.chart text {
-	  fill: white;
-	  font: 10px sans-serif;
-	  text-anchor: end;
-	}
+		.chart text {
+			fill: white;
+			font: 10px sans-serif;
+			text-anchor: end;
+		}
 	
-	.tick text {
-		fill: black;
-	}
+		.tick text {
+			fill: black;
+		}
 	  </style>
   </head>
 	<body>
