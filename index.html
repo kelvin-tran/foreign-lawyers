@@ -464,8 +464,7 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 		
 		var hex_color = d3.scale.linear()
 				.domain([18200, 1000000])
-				.range(["black", "steelblue"])
-				.interpolate(d3.interpolateLab);
+				.range(["#f7fbff","#deebf7","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#08519c","#08306b"]);
 		
 		var hexbin = d3.hexbin()
 				.size([hex_width, hex_height])
