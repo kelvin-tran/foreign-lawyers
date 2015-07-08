@@ -495,26 +495,26 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 		function ready(error, us, jobs) {
 			if (error) throw error;
 		
-				jobs.forEach(function(d) {
+			jobs.forEach(function(d) {
 					var p = hex_projection(d);
 					d[0] = p[0],
 					d[1] = p[1],
 					d.salary = +d.salary;
-				});
+			});
 		
-				hex_svg.append("path")
-					.datum(topojson.feature(us, us.objects.land))
+			hex_svg.append("path")
+				.datum(topojson.feature(us, us.objects.land))
 					.attr("class", "land")
 					.attr("d", hex_path);
 		
-				hex_svg.append("path")
-					.datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+			hex_svg.append("path")
+				.datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
 					.attr("class", "states")
 					.attr("d", hex_path);
 				
-				var median_sal = [];
+			var median_sal = [];
 				
-				hex_svg.append("g")
+			hex_svg.append("g")
 					.attr("class", "hexagons")
 		    .selectAll("path")
 					.data(hexbin(jobs).sort(function(a, b) { return b.length - a.length; }))
@@ -535,7 +535,7 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 					//.style("fill", "steelblue")
 					;
 				
-				console.log(median_sal.sort(function(a, b){return a-b}););
+			console.log(median_sal.sort(function(a, b){return a-b}););
 		}
 		
 		</script>
