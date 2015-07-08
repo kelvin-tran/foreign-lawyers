@@ -489,7 +489,7 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 		var hex_width = 640,
 				hex_height = 333;
 		
-		var hex_color = d3.scale.linear()
+		var hex_color = d3.scale.quantize()
 				.domain([50000, 140000])
 				.range(['rgb(255,247,251)','rgb(236,231,242)','rgb(208,209,230)','rgb(166,189,219)','rgb(116,169,207)','rgb(54,144,192)','rgb(5,112,176)','rgb(4,90,141)','rgb(2,56,88)'])
 				//.interpolate(d3.interpolateLab)
@@ -568,8 +568,8 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 					.style('border-top-color', String)
 					.text(function(d) {
 						console.log(d);
-					  var r = hex_color.invert(d);
-					  return r/100;
+					  var r = hex_color.invertExtent(d);
+					  return r[0]/100;
 					});
 		}
 		
