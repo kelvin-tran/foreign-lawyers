@@ -69,6 +69,30 @@
 		.tick text {
 			fill: black;
 		}
+		
+		#legend {
+			padding: 1.5em 0 0 1.5em;
+		}
+		
+		li.key {
+			border-top-width: 15px;
+			border-top-style: solid;
+			font-size: .75em;
+			width: 5%;
+			padding-left: 0;
+			padding-right: 0;
+		}
+		
+		.list-inline {
+			padding-left:0;
+			list-style:none;
+		}
+		
+		.list-inline > li {
+			display:inline-block;
+			padding-right:5px;
+			padding-left:5px;
+		}
 	  </style>
   </head>
 	<body>
@@ -95,7 +119,7 @@
       </header>
       <section>
 				<h1>Foreign workers in the US</h1>
-				<p><em>View the <a href="http://github.com/kelvin-tran/foreign-lawyers/">source of this content</a>.</em></p>
+				<p><em>View the <a href="http://github.com/kelvin-tran/non-immigrant-workers-in-US/">source of this content</a>.</em></p>
 				<p>By contrast to the rest of the modern world, lawyers seem to care very little about data, maybe apart from the field of <a href="http://www.justice.gov/atr/public/guidelines/hhi.html">competition/antitrust law</a> and say, the sentencing of criminals.  But we should care because, amongst other things, it can be used as evidence support an argument.  I'm thinking along the lines of nationwide data about hiring practices in discrmination cases.</p>
 				<p>Because manipulating data will matter for lawyers one day, I've learned how to use D3.js, which is a data visualisation library that even the <a href="http://www.nytimes.com/interactive/2015/04/20/upshot/missing-black-men.html?abt=0002&abg=1&_r=3">New York Times</a> uses.</p>
 				<p>To be clear, these charts are all rendered dynamically off the data - I'm not manually colouring them or moving bars and hexagons around on Illustrator like a fool.</p>
@@ -109,7 +133,9 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 				<div id='aus-wages'></div>
 				<p><em>Figure 2.  Ok, these guys are killing it - how do I get an E-3 visa?.</em></p>
 				<p>Finally, where are Australians working?  I suspect New York and California are up there, but what about the other states?  To sort this out, we can grid the US into hexagons and map each employee and each employee's salary to a hexagonal bin.  The result is the hexbin map in Figure 3.  Larger hexagons mean more employees in the area, darker colours means a higher median salary.</p>
-				<div id='hexbin-map'></div>
+				<div id='hexbin-map'>
+					<div id='legend'></div>
+				</div>
 				<p><em>Figure 3.  What's going on in Washington and Texas?</em></p>
 				<p>To find out about Washington (Figure 4) and Texas (Figure 5), I isolated the certified applications from employers in those states.</p>
 				<div id="wash-chart"></div>
@@ -148,7 +174,7 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 					.attr("height", height + margin.top + margin.bottom)
 				.append("g")
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-			d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/lawyer-wages.csv", type, function(error, data) {
+			d3.csv("https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/lawyer-wages.csv", type, function(error, data) {
 					if (error) throw error;
 					var x = d3.scale.ordinal()
 							.domain(data.map(function(d) { return d.salary; }))
@@ -208,7 +234,7 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 			    .attr("height", aus_height + aus_margin.top + aus_margin.bottom)
 			  .append("g")
 			    .attr("transform", "translate(" + aus_margin.left + "," + aus_margin.top + ")");
-			d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/aus-wages.csv", type, function(error, data) {
+			d3.csv("https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/aus-wages.csv", type, function(error, data) {
 			  if (error) throw error;
 				var aus_x = d3.scale.ordinal()
 						.domain(data.map(function(d) { return d.salary; }))
@@ -274,14 +300,14 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 			//	.attr("width", choro_w)
 			//	.attr("height", choro_h);
 			//Load in agriculture data
-			//d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/aus-states.csv", function(data) {
+			//d3.csv("https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/aus-states.csv", function(data) {
 				//Set input domain for color scale
 			//	choro_color.domain([
 			//		d3.min(data, function(d) { return d.value; }), 
 			//		d3.max(data, function(d) { return d.value; })
 			//	]);
 				//Load in GeoJSON data
-			//	d3.json("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/us-states.json", function(json) {
+			//	d3.json("https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/us-states.json", function(json) {
 					//Merge the ag. data and GeoJSON
 					//Loop through once for each ag. data value
 			//		for (var i = 0; i < data.length; i++) {
@@ -329,7 +355,7 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 		var tx_xAxis = d3.svg.axis()
 				.scale(tx_x)
 				.orient("bottom");
-		d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/TX.csv", type, function(error, data) {
+		d3.csv("https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/TX.csv", type, function(error, data) {
 			var tx_height = tx_barHeight * data.length + tx_margin.bottom;
 			var tx_chart = d3.select("#texas-chart").append("svg")
 					.attr("class", "chart")
@@ -375,7 +401,7 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 		var wa_xAxis = d3.svg.axis()
 				.scale(wa_x)
 				.orient("bottom");
-		d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/WA.csv", type, function(error, data) {
+		d3.csv("https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/WA.csv", type, function(error, data) {
 			var wa_height = wa_barHeight * data.length + wa_margin.bottom;
 			var wa_chart = d3.select("#wash-chart").append("svg")
 					.attr("class", "chart")
@@ -421,7 +447,7 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 		var aus_prof_xAxis = d3.svg.axis()
 				.scale(aus_prof_x)
 				.orient("bottom");
-		d3.csv("https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/australians-professions.csv", type, function(error, data) {
+		d3.csv("https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/australians-professions.csv", type, function(error, data) {
 			var aus_prof_height = aus_prof_barHeight * data.length + aus_prof_margin.bottom;
 			var aus_prof_chart = d3.select("#prof-chart").append("svg")
 					.attr("class", "chart")
@@ -487,10 +513,14 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 		var hex_svg = d3.select("#hexbin-map").append("svg")
 				.attr("width", hex_width)
 				.attr("height", hex_height);
+				
+		var legend = d3.select('#legend')
+				.append('ul')
+				.attr('class', 'list-inline');
 		
 		queue()
-				.defer(d3.json, "https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/us.json")
-				.defer(d3.csv, "https://raw.githubusercontent.com/kelvin-tran/foreign-lawyers/master/aus_latlng.csv")
+				.defer(d3.json, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/us.json")
+				.defer(d3.csv, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/aus_latlng.csv")
 				.await(ready);
 		
 		function ready(error, us, jobs) {
@@ -528,6 +558,17 @@ I-203-14042-820159,CERTIFIED,11/02/2014,18/02/2014,E-3 Australian,1/04/2014,31/0
 						return "translate(" + d.x + "," + d.y + ")"; 
 					})
 					;
+			
+			var keys = legend.selectAll('li.key')
+					.data(hex_color.range());
+			
+			keys.enter().append('li')
+					.attr('class', 'key')
+					.style('border-top-color', String)
+					.text(function(d) {
+					  var r = hex_color.invertExtent(d);
+					  return r[0]/100;
+					});
 		}
 		
 		</script>
