@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Map of all non-immigrant workers in the US</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-64459548-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+		<style>
+		path {
+		  fill: none;
+		  stroke-linejoin: round;
+		}
+		
+		.land {
+		  fill: #ddd;
+		}
+		
+		.states,
+		.hexagons path {
+		  stroke: #fff;
+		}
+
+		.x.axis path {
+			display: none;
+		}
+	
+		.tick text {
+			fill: black;
+		}
+		
+		#legend {
+			padding: 1.5em 0 0 1.5em;
+		}
+		
+		li.key {
+			border-top-width: 15px;
+			border-top-style: solid;
+			font-size: .75em;
+			width: 5%;
+			padding-left: 0;
+			padding-right: 0;
+		}
+		
+		.list-inline {
+			padding-left:0;
+			list-style:none;
+		}
+		
+		.list-inline > li {
+			display:inline-block;
+			padding-right:5px;
+			padding-left:5px;
+		}
+	  </style>
+  </head>
+	<body>
+    <div class="wrapper">
+      <header>
+        <h1>Kelvin Tran</h1>
+        <p>
+        <img src="https://raw.githubusercontent.com/kelvin-tran/kelvin-tran.github.io/master/static/profile.jpg" style="width:140px;height:140px;border-radius: 10px;">
+        </p>
+        <p>I am a lawyer, but I do <a href="http://kelvin-tran.github.io/">other things</a></p>
+        <p class="view"><a href="http://github.com/kelvin-tran">GitHub</a> | <a href="http://twitter.com/_kelvintran">Twitter</a> | <a href="https://au.linkedin.com/in/kelvintran">LinkedIn</a></p>
+        <div>
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+          <!-- Kelvin Tran GitHub pages index -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-8039812474190322"
+               data-ad-slot="3954668498"
+               data-ad-format="auto"></ins>
+          <script>
+          	(adsbygoogle = window.adsbygoogle || []).push({});
+        	</script>
+        </div>
+      </header>
+      <section>
+				<h1>Map of all non-immigrant workers in the US</h1>
+				<p><em>View the <a href="http://github.com/kelvin-tran/non-immigrant-workers-in-US/">source of this content</a>.</em></p>
+				<div id='hexbin-map'>
+					<div id='legend'><small>Median wage within the hexbinned area ('000s)</small></div>
+				</div>
+				<p><em>This post is a follow-up to my <a href="http://github.com/kelvin-tran/non-immigrant-workers-in-US/">earlier piece</a> on non-immigrant workers in the US.</em></p>
+				<p>The above map is a bivariate hexbin map of the quantity of non-immgrant workers across the US and the median salary of the workers within that hexbinned area.</p>
+				<p>See more of my projects (map and data visualisation related) <a href="http://kelvin-tran.github.io/">here</a> or learn about visualising data with <a href="http://d3js.org/">D3.js</a>.</p>
+      </section>
+      <div>
+				<footer>
+					<p>This page is maintained by <a href="http://github.com/kelvin-tran">Kelvin Tran</a></p>
+					<p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+				</footer>
+			</div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="javascripts/hexbin.min.js"></script>
+    <script src="javascripts/scale.fix.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+		<script>
+		
+		var hex_width = 640,
+				hex_height = 333;
+		
+		var hex_color = d3.scale.quantize()
+				.domain([50000, 180000])
+				.range(['rgb(255,247,251)','rgb(236,231,242)','rgb(208,209,230)','rgb(166,189,219)','rgb(116,169,207)','rgb(54,144,192)','rgb(5,112,176)','rgb(4,90,141)','rgb(2,56,88)'])
+				//.interpolate(d3.interpolateLab)
+				;
+		
+		var hexbin = d3.hexbin()
+				.size([hex_width, hex_height])
+				.radius(6);
+		
+		var hex_radius = d3.scale.sqrt()
+				.domain([1, 162])
+				.range([0, 6]);
+		
+		var hex_projection = d3.geo.albers()
+				.scale(667)
+				.translate([hex_width / 2, hex_height / 2])
+				.precision(.1);
+		
+		var hex_path = d3.geo.path()
+				.projection(hex_projection);
+		
+		var hex_svg = d3.select("#hexbin-map").append("svg")
+				.attr("width", hex_width)
+				.attr("height", hex_height);
+				
+		var legend = d3.select('#legend')
+				.append('ul')
+				.attr('class', 'list-inline');
+		
+		queue()
+				.defer(d3.json, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/us.json")
+				.defer(d3.csv, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/all_latlng.csv")
+				.await(ready);
+		
+		function ready(error, us, jobs) {
+			if (error) throw error;
+		
+			jobs.forEach(function(d) {
+					var p = hex_projection(d);
+					d[0] = p[0],
+					d[1] = p[1],
+					d.salary = +d.salary;
+			});
+		
+			hex_svg.append("path")
+				.datum(topojson.feature(us, us.objects.land))
+					.attr("class", "land")
+					.attr("d", hex_path);
+		
+			hex_svg.append("path")
+				.datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+					.attr("class", "states")
+					.attr("d", hex_path);
+				
+			hex_svg.append("g")
+					.attr("class", "hexagons")
+		    .selectAll("path")
+					.data(hexbin(jobs).sort(function(a, b) { return b.length - a.length; }))
+		    .enter().append("path")
+					.attr("d", function(d) { return hexbin.hexagon(hex_radius(d.length)); })
+					.style("fill", function(d) {
+						return hex_color(d3.median(d, function(d) {
+							return +d.salary; 
+						}));
+					})
+					.attr("transform", function(d) {
+						return "translate(" + d.x + "," + d.y + ")"; 
+					})
+					;
+			
+			var keys = legend.selectAll('li.key')
+					.data(hex_color.range());
+			
+			keys.enter().append('li')
+					.attr('class', 'key')
+					.style('border-top-color', String)
+					.text(function(d) {
+					  var r = hex_color.invertExtent(d);
+					  return d3.format("$02f")(r[0]/1000);
+					});
+		}
+		
+		</script>
+	</body>
+</html>
