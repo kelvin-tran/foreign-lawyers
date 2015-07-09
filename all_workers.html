@@ -65,6 +65,24 @@
 			padding-right:5px;
 			padding-left:5px;
 		}
+		
+		.place,
+		.place-label {
+			fill: #444;
+		}
+		
+		text {
+		  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		  font-size: 10px;
+		  background-color: white;
+		  pointer-events: none;
+		}
+		
+		text.shadow {
+			stroke: white;
+			stroke-width: 1.5px;
+			opacity: 0.9;
+		}
 	  </style>
   </head>
 	<body>
@@ -136,7 +154,8 @@
 				.precision(.1);
 		
 		var hex_path = d3.geo.path()
-				.projection(hex_projection);
+				.projection(hex_projection)
+				.pointRadius(1);
 		
 		var hex_svg = d3.select("#hexbin-map").append("svg")
 				.attr("width", hex_width)
@@ -149,9 +168,10 @@
 		queue()
 				.defer(d3.json, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/us.json")
 				.defer(d3.csv, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/all_latlng.csv")
+				.defer(d3.csv, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/us_place_names.csv")
 				.await(ready);
 		
-		function ready(error, us, jobs) {
+		function ready(error, us, jobs, name_data) {
 			if (error) throw error;
 		
 			jobs.forEach(function(d) {
@@ -187,6 +207,28 @@
 						return "translate(" + d.x + "," + d.y + ")"; 
 					})
 					;
+			
+			hex_svg.append("path")
+				.datum(topojson.feature(name_data, name_data.objects.us_places))
+					.attr("d", path)
+					.attr("class", "place");
+			
+			hex_svg.selectAll(".place-label")
+				.data(topojson.feature(name_data, name_data.objects.us_places).features)
+				.enter().append("text")
+					.attr("class", "place-label")
+					.attr("transform", function(d) { return "translate(" + projection(d.geometry.coordinates) + ")"; })
+					.attr("dy", ".35em")
+					.attr("class", "shadow")
+					.text(function(d) { return d.properties.name; });
+					
+			hex_svg.selectAll(".place-label")
+				.data(topojson.feature(name_data, name_data.objects.us_places).features)
+				.enter().append("text")
+					.attr("class", "place-label")
+					.attr("transform", function(d) { return "translate(" + projection(d.geometry.coordinates) + ")"; })
+					.attr("dy", ".35em")
+					.text(function(d) { return d.properties.name; });
 			
 			var keys = legend.selectAll('li.key')
 					.data(hex_color.range());
