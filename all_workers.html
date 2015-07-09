@@ -113,8 +113,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
 		<script>
 		
-		var hex_width = 640,
-				hex_height = 333;
+		var hex_width = 660,
+				hex_height = 400;
 		
 		var hex_color = d3.scale.quantize()
 				.domain([50000, 180000])
@@ -131,7 +131,7 @@
 				.range([0, 6]);
 		
 		var hex_projection = d3.geo.albers()
-				.scale(667)
+				.scale(800)
 				.translate([hex_width / 2, hex_height / 2])
 				.precision(.1);
 		
@@ -178,6 +178,12 @@
 		    .enter().append("path")
 					.attr("d", function(d) { return hexbin.hexagon(hex_radius(d.length)); })
 					.style("fill", function(d) {
+						console.log(d3.min(d, function(d) {
+							return d.length;
+						}));
+						console.log(d3.max(d, function(d) {
+							return d.length;
+						}));
 						return hex_color(d3.median(d, function(d) {
 							return +d.salary; 
 						}));
