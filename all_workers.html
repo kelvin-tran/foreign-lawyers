@@ -126,9 +126,9 @@
 				.size([hex_width, hex_height])
 				.radius(6);
 		
-		var hex_radius = d3.scale.quantize()
+		var hex_radius = d3.scale.sqrt()
 				.domain([250, 30000])
-				.range([1, 6]);
+				.range([1, 8]);
 		
 		var hex_projection = d3.geo.albers()
 				.scale(800)
