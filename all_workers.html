@@ -106,7 +106,10 @@
 				<h1>Map of all non-immigrant workers in the US</h1>
 				<p><em>View the <a href="http://github.com/kelvin-tran/non-immigrant-workers-in-US/">source of this content</a>.</em></p>
 				<div id='hexbin-map'>
-					<div id='legend'><small>Median wage within the hexbinned area ('000s)</small></div>
+					<div id='legend'>
+						<small>Median wage within the hexbinned area ('000s)</small>
+						<img id='loading' src="https://raw.githubusercontent.com/kelvin-tran/kelvin-tran.github.io/master/static/loading.gif" align="middle">
+					</div>
 				</div>
 				<p><em>This post is a follow-up to my <a href="http://kelvin-tran.github.io/non-immigrant-workers-in-US/">earlier piece</a> on non-immigrant workers in the US.</em></p>
 				<p>The above map is a bivariate hexbin map of the quantity of non-immgrant workers across the US and the median salary of the workers within that hexbinned area.</p>
@@ -168,6 +171,10 @@
 		
 		function ready(error, us, jobs, name_data) {
 			if (error) throw error;
+			
+			var parent = document.getElementById("hexbin-map");
+			var child = document.getElementById("loading");
+			parent.removeChild(child);
 		
 			jobs.forEach(function(d) {
 					var p = hex_projection(d);
