@@ -168,7 +168,7 @@
 		queue()
 				.defer(d3.json, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/us.json")
 				.defer(d3.csv, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/all_latlng.csv")
-				.defer(d3.csv, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/us_place_names.csv")
+				.defer(d3.json, "https://raw.githubusercontent.com/kelvin-tran/non-immigrant-workers-in-US/master/us_place_names.json")
 				.await(ready);
 		
 		function ready(error, us, jobs, name_data) {
@@ -198,7 +198,6 @@
 		    .enter().append("path")
 					.attr("d", function(d) { return hexbin.hexagon(hex_radius(d.length)); })
 					.style("fill", function(d) {
-						console.log(d.length);
 						return hex_color(d3.median(d, function(d) {
 							return +d.salary; 
 						}));
