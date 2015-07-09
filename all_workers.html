@@ -178,12 +178,7 @@
 		    .enter().append("path")
 					.attr("d", function(d) { return hexbin.hexagon(hex_radius(d.length)); })
 					.style("fill", function(d) {
-						console.log(d3.min(d, function(d) {
-							return d.length;
-						}));
-						console.log(d3.max(d, function(d) {
-							return d.length;
-						}));
+						console.log(d.length);
 						return hex_color(d3.median(d, function(d) {
 							return +d.salary; 
 						}));
